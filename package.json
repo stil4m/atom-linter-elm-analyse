@@ -1,0 +1,27 @@
+{
+    "name": "linter-elm-analyse",
+    "main": "./lib/linter-elm-analyse",
+    "version": "0.0.0",
+    "description": "Atom linter for elm-analyse",
+    "keywords": [],
+    "activationCommands": {},
+    "repository": "https://github.com/atom/linter-elm-analyse",
+    "license": "MIT",
+    "engines": {
+        "atom": ">=1.0.0 <2.0.0"
+    },
+    "dependencies": {
+        "atom-linter": "10.0.0"
+    },
+    "package-deps": [
+        "linter",
+        "linter-ui-default"
+    ],
+    "providedServices": {
+        "linter": {
+              "versions": {
+                  "1.0.0": "provideLinter"
+              }
+        }
+    }
+}
