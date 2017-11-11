@@ -7,12 +7,14 @@ import Model.Analyses
 
 
 type alias Model =
-    { analyses : List ElmAnalyse.Message
+    { projectPath : String
+    , analyses : List ElmAnalyse.Message
     }
 
 
 type Message
-    = ProcessMessages Value
+    = SetProjectPath String
+    | ProcessMessages Value
 
 
 main : Program Never Model Message
@@ -26,13 +28,17 @@ main =
 
 init : ( Model, Cmd Message )
 init =
-    { analyses = [] }
+    { projectPath = "", analyses = [] }
         |> And.noCommand
 
 
 update : Message -> Model -> ( Model, Cmd Message )
 update message model =
     case message of
+        SetProjectPath projectPath ->
+            { model | projectPath = projectPath }
+                |> And.noCommand
+
         ProcessMessages rawJson ->
             Model.Analyses.process rawJson model
                 |> And.noCommand
@@ -41,8 +47,12 @@ update message model =
 subscriptions : Model -> Sub Message
 subscriptions model =
     Sub.batch
-        [ processMessages ProcessMessages
+        [ setProjectPath SetProjectPath
+        , processMessages ProcessMessages
         ]
 
 
 port processMessages : (Value -> message) -> Sub message
+
+
+port setProjectPath : (String -> message) -> Sub message

@@ -5815,26 +5815,43 @@ var _user$project$Model_Analyses$process = F2(
 var _user$project$Main$update = F2(
 	function (message, model) {
 		var _p0 = message;
-		return _user$project$And$noCommand(
-			A2(_user$project$Model_Analyses$process, _p0._0, model));
+		if (_p0.ctor === 'SetProjectPath') {
+			return _user$project$And$noCommand(
+				_elm_lang$core$Native_Utils.update(
+					model,
+					{projectPath: _p0._0}));
+		} else {
+			return _user$project$And$noCommand(
+				A2(_user$project$Model_Analyses$process, _p0._0, model));
+		}
 	});
 var _user$project$Main$init = _user$project$And$noCommand(
 	{
+		projectPath: '',
 		analyses: {ctor: '[]'}
 	});
 var _user$project$Main$processMessages = _elm_lang$core$Native_Platform.incomingPort('processMessages', _elm_lang$core$Json_Decode$value);
-var _user$project$Main$Model = function (a) {
-	return {analyses: a};
-};
+var _user$project$Main$setProjectPath = _elm_lang$core$Native_Platform.incomingPort('setProjectPath', _elm_lang$core$Json_Decode$string);
+var _user$project$Main$Model = F2(
+	function (a, b) {
+		return {projectPath: a, analyses: b};
+	});
 var _user$project$Main$ProcessMessages = function (a) {
 	return {ctor: 'ProcessMessages', _0: a};
+};
+var _user$project$Main$SetProjectPath = function (a) {
+	return {ctor: 'SetProjectPath', _0: a};
 };
 var _user$project$Main$subscriptions = function (model) {
 	return _elm_lang$core$Platform_Sub$batch(
 		{
 			ctor: '::',
-			_0: _user$project$Main$processMessages(_user$project$Main$ProcessMessages),
-			_1: {ctor: '[]'}
+			_0: _user$project$Main$setProjectPath(_user$project$Main$SetProjectPath),
+			_1: {
+				ctor: '::',
+				_0: _user$project$Main$processMessages(_user$project$Main$ProcessMessages),
+				_1: {ctor: '[]'}
+			}
 		});
 };
 var _user$project$Main$main = _elm_lang$core$Platform$program(
