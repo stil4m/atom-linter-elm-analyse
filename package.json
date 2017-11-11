@@ -17,6 +17,13 @@
         "linter",
         "linter-ui-default"
     ],
+    "providedServices": {
+        "linter": {
+            "versions": {
+                "2.0.0": "provideLinter"
+            }
+        }
+    },
     "consumedServices": {
         "status-bar": {
             "versions": {
