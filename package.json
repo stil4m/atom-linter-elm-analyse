@@ -16,5 +16,12 @@
     "package-deps": [
         "linter",
         "linter-ui-default"
-    ]
+    ],
+    "consumedServices": {
+        "status-bar": {
+            "versions": {
+                "^1.0.0": "consumeStatusBar"
+            }
+        }
+    }
 }
