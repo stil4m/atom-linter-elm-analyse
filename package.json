@@ -18,13 +18,14 @@
         "linter-ui-default"
     ],
     "providedServices": {
-        "linter": {
-            "versions": {
-                "2.0.0": "provideLinter"
-            }
-        }
+
     },
     "consumedServices": {
+        "linter-indie": {
+            "versions": {
+                "2.0.0": "consumeIndie"
+            }
+        },
         "status-bar": {
             "versions": {
                 "^1.0.0": "consumeStatusBar"
