@@ -5778,6 +5778,22 @@ var _user$project$ElmAnalyse$reduce = function (range) {
 		return {ctor: '[]'};
 	}
 };
+var _user$project$ElmAnalyse$getDescription = function (message) {
+	return A2(
+		_elm_lang$core$Basics_ops['++'],
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			'**Type:** ',
+			A2(_elm_lang$core$Basics_ops['++'], message.type_, '<br/>')),
+		A2(_elm_lang$core$Basics_ops['++'], '**Reference URL:** https://stil4m.github.io/elm-analyse/#/messages/', message.type_));
+};
+var _user$project$ElmAnalyse$getShortMessage = function (message) {
+	return A2(
+		_elm_lang$core$Maybe$withDefault,
+		'',
+		_elm_lang$core$List$head(
+			A2(_elm_lang$core$String$split, 'in file', message.message)));
+};
 var _user$project$ElmAnalyse$getCoords = function (message) {
 	return _user$project$ElmAnalyse$reduce(message.value.range);
 };
@@ -5840,8 +5856,8 @@ var _user$project$Transform$convert = F2(
 					A2(_elm_lang$core$Basics_ops['++'], '/', analysis.value.file)),
 				position: _user$project$ElmAnalyse$getCoords(analysis)
 			},
-			analysis.type_,
-			analysis.message);
+			_user$project$ElmAnalyse$getShortMessage(analysis),
+			_user$project$ElmAnalyse$getDescription(analysis));
 	});
 var _user$project$Transform$analysesToLints = F2(
 	function (projectPath, analyses) {

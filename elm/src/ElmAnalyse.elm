@@ -1,4 +1,4 @@
-module ElmAnalyse exposing (Message, decode, getCoords)
+module ElmAnalyse exposing (Message, decode, getCoords, getDescription, getShortMessage)
 
 import Json.Decode exposing (Decoder, decodeValue, field, int, list, map2, map6, string)
 import Json.Encode exposing (Value)
@@ -47,6 +47,19 @@ decode rawJson =
 getCoords : Message -> List ( Int, Int )
 getCoords message =
     reduce message.value.range
+
+
+getShortMessage : Message -> String
+getShortMessage message =
+    String.split "in file" message.message
+        |> List.head
+        |> Maybe.withDefault ""
+
+
+getDescription : Message -> String
+getDescription message =
+    ("**Type:** " ++ message.type_ ++ "<br/>")
+        ++ ("**Reference URL:** https://stil4m.github.io/elm-analyse/#/messages/" ++ message.type_)
 
 
 reduce : List Int -> List ( Int, Int )

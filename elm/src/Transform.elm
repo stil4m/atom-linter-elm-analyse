@@ -1,7 +1,7 @@
 module Transform exposing (analysesToLints)
 
 import AtomLinter exposing (Message)
-import ElmAnalyse exposing (getCoords)
+import ElmAnalyse exposing (getCoords, getDescription, getShortMessage)
 
 
 analysesToLints : String -> List ElmAnalyse.Message -> List AtomLinter.Message
@@ -16,5 +16,5 @@ convert projectPath analysis =
         { file = projectPath ++ "/" ++ analysis.value.file
         , position = getCoords analysis
         }
-        analysis.type_
-        analysis.message
+        (getShortMessage analysis)
+        (getDescription analysis)
