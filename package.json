@@ -10,9 +10,7 @@
     "engines": {
         "atom": ">=1.0.0 <2.0.0"
     },
-    "dependencies": {
-        "atom-linter": "10.0.0"
-    },
+    "dependencies": {},
     "package-deps": [
         "linter",
         "linter-ui-default"
