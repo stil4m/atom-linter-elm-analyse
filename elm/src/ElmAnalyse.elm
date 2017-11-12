@@ -1,4 +1,4 @@
-module ElmAnalyse exposing (Message, decode)
+module ElmAnalyse exposing (Message, decode, getCoords)
 
 import Json.Decode exposing (Decoder, decodeValue, field, int, list, map2, map6, string)
 import Json.Encode exposing (Value)
@@ -34,7 +34,7 @@ message =
         (field "id" int)
         (field "message" string)
         (field "status" string)
-        (field "type_" string)
+        (field "type" string)
         (field "value" value)
 
 
@@ -42,3 +42,18 @@ decode : Json.Encode.Value -> List Message
 decode rawJson =
     decodeValue (list message) rawJson
         |> Result.withDefault []
+
+
+getCoords : Message -> List ( Int, Int )
+getCoords message =
+    reduce message.value.range
+
+
+reduce : List Int -> List ( Int, Int )
+reduce range =
+    case range of
+        a :: b :: rest ->
+            ( a, b ) :: reduce rest
+
+        _ ->
+            []

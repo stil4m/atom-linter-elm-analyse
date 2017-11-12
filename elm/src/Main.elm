@@ -1,15 +1,9 @@
 port module Main exposing (main)
 
 import And
-import ElmAnalyse
 import Json.Encode exposing (Value)
+import Model exposing (Model)
 import Model.Analyses
-
-
-type alias Model =
-    { projectPath : String
-    , analyses : List ElmAnalyse.Message
-    }
 
 
 type Message
@@ -28,7 +22,7 @@ main =
 
 init : ( Model, Cmd Message )
 init =
-    { projectPath = "", analyses = [] }
+    Model.default
         |> And.noCommand
 
 
@@ -41,7 +35,7 @@ update message model =
 
         ProcessMessages rawJson ->
             Model.Analyses.process rawJson model
-                |> And.noCommand
+                |> And.sendLintsToEditor
 
 
 subscriptions : Model -> Sub Message

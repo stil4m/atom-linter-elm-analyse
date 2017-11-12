@@ -5757,14 +5757,30 @@ var _elm_lang$core$Tuple$first = function (_p6) {
 	return _p7._0;
 };
 
-var _user$project$And$execute = F2(
-	function (command, model) {
-		return {ctor: '_Tuple2', _0: model, _1: command};
+var _user$project$AtomLinter$Location = F2(
+	function (a, b) {
+		return {file: a, position: b};
 	});
-var _user$project$And$noCommand = function (model) {
-	return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
-};
+var _user$project$AtomLinter$Message = F4(
+	function (a, b, c, d) {
+		return {severity: a, location: b, excerpt: c, description: d};
+	});
 
+var _user$project$ElmAnalyse$reduce = function (range) {
+	var _p0 = range;
+	if ((_p0.ctor === '::') && (_p0._1.ctor === '::')) {
+		return {
+			ctor: '::',
+			_0: {ctor: '_Tuple2', _0: _p0._0, _1: _p0._1._0},
+			_1: _user$project$ElmAnalyse$reduce(_p0._1._1)
+		};
+	} else {
+		return {ctor: '[]'};
+	}
+};
+var _user$project$ElmAnalyse$getCoords = function (message) {
+	return _user$project$ElmAnalyse$reduce(message.value.range);
+};
 var _user$project$ElmAnalyse$Value = F2(
 	function (a, b) {
 		return {file: a, range: b};
@@ -5791,7 +5807,7 @@ var _user$project$ElmAnalyse$message = A7(
 	A2(_elm_lang$core$Json_Decode$field, 'id', _elm_lang$core$Json_Decode$int),
 	A2(_elm_lang$core$Json_Decode$field, 'message', _elm_lang$core$Json_Decode$string),
 	A2(_elm_lang$core$Json_Decode$field, 'status', _elm_lang$core$Json_Decode$string),
-	A2(_elm_lang$core$Json_Decode$field, 'type_', _elm_lang$core$Json_Decode$string),
+	A2(_elm_lang$core$Json_Decode$field, 'type', _elm_lang$core$Json_Decode$string),
 	A2(_elm_lang$core$Json_Decode$field, 'value', _user$project$ElmAnalyse$value));
 var _user$project$ElmAnalyse$decode = function (rawJson) {
 	return A2(
@@ -5801,6 +5817,73 @@ var _user$project$ElmAnalyse$decode = function (rawJson) {
 			_elm_lang$core$Json_Decode$decodeValue,
 			_elm_lang$core$Json_Decode$list(_user$project$ElmAnalyse$message),
 			rawJson));
+};
+
+var _user$project$Model$default = {
+	projectPath: '',
+	analyses: {ctor: '[]'}
+};
+var _user$project$Model$Model = F2(
+	function (a, b) {
+		return {projectPath: a, analyses: b};
+	});
+
+var _user$project$Transform$convert = F2(
+	function (projectPath, analysis) {
+		return A4(
+			_user$project$AtomLinter$Message,
+			'warning',
+			{
+				file: A2(
+					_elm_lang$core$Basics_ops['++'],
+					projectPath,
+					A2(_elm_lang$core$Basics_ops['++'], '/', analysis.value.file)),
+				position: _user$project$ElmAnalyse$getCoords(analysis)
+			},
+			analysis.type_,
+			analysis.message);
+	});
+var _user$project$Transform$analysesToLints = F2(
+	function (projectPath, analyses) {
+		return A2(
+			_elm_lang$core$List$map,
+			_user$project$Transform$convert(projectPath),
+			analyses);
+	});
+
+var _user$project$And$execute = F2(
+	function (command, model) {
+		return {ctor: '_Tuple2', _0: model, _1: command};
+	});
+var _user$project$And$noCommand = function (model) {
+	return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+};
+var _user$project$And$sendLints = _elm_lang$core$Native_Platform.outgoingPort(
+	'sendLints',
+	function (v) {
+		return _elm_lang$core$Native_List.toArray(v).map(
+			function (v) {
+				return {
+					severity: v.severity,
+					location: {
+						file: v.location.file,
+						position: _elm_lang$core$Native_List.toArray(v.location.position).map(
+							function (v) {
+								return [v._0, v._1];
+							})
+					},
+					excerpt: v.excerpt,
+					description: v.description
+				};
+			});
+	});
+var _user$project$And$sendLintsToEditor = function (model) {
+	return {
+		ctor: '_Tuple2',
+		_0: model,
+		_1: _user$project$And$sendLints(
+			A2(_user$project$Transform$analysesToLints, model.projectPath, model.analyses))
+	};
 };
 
 var _user$project$Model_Analyses$process = F2(
@@ -5821,21 +5904,13 @@ var _user$project$Main$update = F2(
 					model,
 					{projectPath: _p0._0}));
 		} else {
-			return _user$project$And$noCommand(
+			return _user$project$And$sendLintsToEditor(
 				A2(_user$project$Model_Analyses$process, _p0._0, model));
 		}
 	});
-var _user$project$Main$init = _user$project$And$noCommand(
-	{
-		projectPath: '',
-		analyses: {ctor: '[]'}
-	});
+var _user$project$Main$init = _user$project$And$noCommand(_user$project$Model$default);
 var _user$project$Main$processMessages = _elm_lang$core$Native_Platform.incomingPort('processMessages', _elm_lang$core$Json_Decode$value);
 var _user$project$Main$setProjectPath = _elm_lang$core$Native_Platform.incomingPort('setProjectPath', _elm_lang$core$Json_Decode$string);
-var _user$project$Main$Model = F2(
-	function (a, b) {
-		return {projectPath: a, analyses: b};
-	});
 var _user$project$Main$ProcessMessages = function (a) {
 	return {ctor: 'ProcessMessages', _0: a};
 };
