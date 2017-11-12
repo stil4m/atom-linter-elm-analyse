@@ -1,12 +1,25 @@
 module ElmAnalyse exposing (Message, decode, getCoords, getDescription, getShortMessage)
 
-import Json.Decode exposing (Decoder, decodeValue, field, int, list, map2, map6, string)
+import Json.Decode exposing (Decoder, decodeValue, field, int, list, map, map2, map6, oneOf, string)
 import Json.Encode exposing (Value)
+
+
+type Range
+    = SingleRange (List Int)
+    | DoubleRange (List Int) (List Int)
+
+
+range : Decoder Range
+range =
+    oneOf
+        [ map SingleRange (field "range" <| list int)
+        , map2 DoubleRange (field "range1" <| list int) (field "range2" <| list int)
+        ]
 
 
 type alias Value =
     { file : String
-    , range : List Int
+    , range : Range
     }
 
 
@@ -14,7 +27,7 @@ value : Decoder Value
 value =
     map2 Value
         (field "file" string)
-        (field "range" <| list int)
+        range
 
 
 type alias Message =
@@ -40,13 +53,18 @@ message =
 
 decode : Json.Encode.Value -> List Message
 decode rawJson =
-    decodeValue (list message) rawJson
+    (Debug.log "decode" <| decodeValue (list message) rawJson)
         |> Result.withDefault []
 
 
 getCoords : Message -> List ( Int, Int )
 getCoords message =
-    reduce message.value.range
+    case message.value.range of
+        SingleRange range ->
+            reduce range
+
+        DoubleRange range1 range2 ->
+            reduce range1
 
 
 getShortMessage : Message -> String

@@ -5795,24 +5795,59 @@ var _user$project$ElmAnalyse$getShortMessage = function (message) {
 			A2(_elm_lang$core$String$split, 'in file', message.message)));
 };
 var _user$project$ElmAnalyse$getCoords = function (message) {
-	return _user$project$ElmAnalyse$reduce(message.value.range);
+	var _p1 = message.value.range;
+	if (_p1.ctor === 'SingleRange') {
+		return _user$project$ElmAnalyse$reduce(_p1._0);
+	} else {
+		return _user$project$ElmAnalyse$reduce(_p1._0);
+	}
 };
 var _user$project$ElmAnalyse$Value = F2(
 	function (a, b) {
 		return {file: a, range: b};
 	});
-var _user$project$ElmAnalyse$value = A3(
-	_elm_lang$core$Json_Decode$map2,
-	_user$project$ElmAnalyse$Value,
-	A2(_elm_lang$core$Json_Decode$field, 'file', _elm_lang$core$Json_Decode$string),
-	A2(
-		_elm_lang$core$Json_Decode$field,
-		'range',
-		_elm_lang$core$Json_Decode$list(_elm_lang$core$Json_Decode$int)));
 var _user$project$ElmAnalyse$Message = F6(
 	function (a, b, c, d, e, f) {
 		return {files: a, id: b, message: c, status: d, type_: e, value: f};
 	});
+var _user$project$ElmAnalyse$DoubleRange = F2(
+	function (a, b) {
+		return {ctor: 'DoubleRange', _0: a, _1: b};
+	});
+var _user$project$ElmAnalyse$SingleRange = function (a) {
+	return {ctor: 'SingleRange', _0: a};
+};
+var _user$project$ElmAnalyse$range = _elm_lang$core$Json_Decode$oneOf(
+	{
+		ctor: '::',
+		_0: A2(
+			_elm_lang$core$Json_Decode$map,
+			_user$project$ElmAnalyse$SingleRange,
+			A2(
+				_elm_lang$core$Json_Decode$field,
+				'range',
+				_elm_lang$core$Json_Decode$list(_elm_lang$core$Json_Decode$int))),
+		_1: {
+			ctor: '::',
+			_0: A3(
+				_elm_lang$core$Json_Decode$map2,
+				_user$project$ElmAnalyse$DoubleRange,
+				A2(
+					_elm_lang$core$Json_Decode$field,
+					'range1',
+					_elm_lang$core$Json_Decode$list(_elm_lang$core$Json_Decode$int)),
+				A2(
+					_elm_lang$core$Json_Decode$field,
+					'range2',
+					_elm_lang$core$Json_Decode$list(_elm_lang$core$Json_Decode$int))),
+			_1: {ctor: '[]'}
+		}
+	});
+var _user$project$ElmAnalyse$value = A3(
+	_elm_lang$core$Json_Decode$map2,
+	_user$project$ElmAnalyse$Value,
+	A2(_elm_lang$core$Json_Decode$field, 'file', _elm_lang$core$Json_Decode$string),
+	_user$project$ElmAnalyse$range);
 var _user$project$ElmAnalyse$message = A7(
 	_elm_lang$core$Json_Decode$map6,
 	_user$project$ElmAnalyse$Message,
@@ -5830,9 +5865,12 @@ var _user$project$ElmAnalyse$decode = function (rawJson) {
 		_elm_lang$core$Result$withDefault,
 		{ctor: '[]'},
 		A2(
-			_elm_lang$core$Json_Decode$decodeValue,
-			_elm_lang$core$Json_Decode$list(_user$project$ElmAnalyse$message),
-			rawJson));
+			_elm_lang$core$Debug$log,
+			'decode',
+			A2(
+				_elm_lang$core$Json_Decode$decodeValue,
+				_elm_lang$core$Json_Decode$list(_user$project$ElmAnalyse$message),
+				rawJson)));
 };
 
 var _user$project$Model$default = {
