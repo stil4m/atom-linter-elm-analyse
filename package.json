@@ -15,9 +15,7 @@
         "linter",
         "linter-ui-default"
     ],
-    "providedServices": {
-
-    },
+    "providedServices": {},
     "consumedServices": {
         "linter-indie": {
             "versions": {
