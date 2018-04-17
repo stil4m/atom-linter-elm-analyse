@@ -1,6 +1,6 @@
 {
-    "context-menu": {
-        "atom-text-editor": []
-    },
-    "menu": []
+  "context-menu": {
+    "atom-text-editor": []
+  },
+  "menu": []
 }
