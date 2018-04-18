@@ -5,7 +5,7 @@
     "description": "Atom linter for elm-analyse",
     "keywords": [],
     "activationCommands": {},
-    "repository": "https://github.com/atom/linter-elm-analyse",
+    "repository": "https://github.com/stil4m/atom-linter-elm-analyse",
     "license": "MIT",
     "engines": {
         "atom": ">=1.0.0 <2.0.0"
