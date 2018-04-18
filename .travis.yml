@@ -1,0 +1,20 @@
+sudo: false
+
+language: node_js
+node_js:
+  - "6"
+
+matrix:
+  fast_finish: true
+
+cache:
+  directories:
+  - node_modules
+  - sysconfcpus
+
+install:
+  - npm install
+
+script:
+  - §sh ./prettier-check.sh
+
