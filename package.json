@@ -1,36 +1,36 @@
 {
-    "name": "linter-elm-analyse",
-    "main": "./lib/linter-elm-analyse",
-    "version": "0.0.0",
-    "description": "Atom linter for elm-analyse",
-    "keywords": [],
-    "activationCommands": {},
-    "repository": "https://github.com/stil4m/atom-linter-elm-analyse",
-    "license": "MIT",
-    "engines": {
-        "atom": ">=1.0.0 <2.0.0"
+  "name": "linter-elm-analyse",
+  "main": "./lib/linter-elm-analyse",
+  "version": "0.1.0",
+  "description": "Atom linter for elm-analyse",
+  "keywords": [],
+  "activationCommands": {},
+  "repository": "https://github.com/stil4m/atom-linter-elm-analyse",
+  "license": "MIT",
+  "engines": {
+    "atom": ">=1.0.0 <2.0.0"
+  },
+  "dependencies": {
+    "request": "^2.73.0"
+  },
+  "package-deps": [
+    "linter",
+    "linter-ui-default"
+  ],
+  "providedServices": {},
+  "consumedServices": {
+    "linter-indie": {
+      "versions": {
+        "2.0.0": "consumeIndie"
+      }
     },
-    "dependencies": {
-        "request": "^2.73.0"
-    },
-    "package-deps": [
-        "linter",
-        "linter-ui-default"
-    ],
-    "providedServices": {},
-    "consumedServices": {
-        "linter-indie": {
-            "versions": {
-                "2.0.0": "consumeIndie"
-            }
-        },
-        "status-bar": {
-            "versions": {
-                "^1.0.0": "consumeStatusBar"
-            }
-        }
-    },
-    "devDependencies": {
-        "prettier": "^1.12.1"
+    "status-bar": {
+      "versions": {
+        "^1.0.0": "consumeStatusBar"
+      }
     }
+  },
+  "devDependencies": {
+    "prettier": "^1.12.1"
+  }
 }
