@@ -16,5 +16,5 @@ install:
   - npm install
 
 script:
-  - §sh ./prettier-check.sh
+  - sh ./prettier-check.sh
 

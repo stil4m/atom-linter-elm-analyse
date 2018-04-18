@@ -7,4 +7,3 @@ diffs=$(node_modules/.bin/prettier --single-quote --tab-width 4 -l $jsfiles)
 
 echo $diffs
 exit 1
-
