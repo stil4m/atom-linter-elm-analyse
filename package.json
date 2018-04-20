@@ -1,7 +1,7 @@
 {
   "name": "elm-analyse",
   "main": "./lib/linter-elm-analyse",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Atom linter for elm-analyse",
   "keywords": [],
   "activationCommands": {},
